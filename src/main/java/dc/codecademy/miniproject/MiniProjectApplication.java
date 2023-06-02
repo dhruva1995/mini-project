@@ -48,8 +48,8 @@ public class MiniProjectApplication {
 				SpringApplication.exit(context, () -> -2);
 				return;
 			}
-			userDetailsService.saveUser("user", "password");
-			userDetailsService.saveUser("user2", "password");
+			// userDetailsService.saveUser("user", "password");
+			// userDetailsService.saveUser("user2", "password");
 		};
 	}
 

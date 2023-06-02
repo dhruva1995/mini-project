@@ -74,7 +74,7 @@ public class SecurityConfig {
 						auth -> auth
 								.requestMatchers("/h2-console/**").permitAll()
 								.requestMatchers("/api/v1/auth/**").permitAll()
-								.requestMatchers("/v3/api-docs/**", "/swagger-ui.html").permitAll()
+								.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 								.anyRequest().authenticated())
 				.headers(headers -> headers.frameOptions(opt -> opt.sameOrigin()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

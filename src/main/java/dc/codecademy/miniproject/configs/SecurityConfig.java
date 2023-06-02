@@ -1,6 +1,6 @@
 package dc.codecademy.miniproject.configs;
 
-import java.util.List;
+import java.util.Arrays;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -27,6 +27,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
@@ -85,14 +87,6 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.httpBasic(Customizer.withDefaults())
-				.cors(corsConfig -> corsConfig.configurationSource(request -> {
-					var cors = new CorsConfiguration();
-					cors.addAllowedOrigin("*");
-					cors.addAllowedMethod("*");
-					cors.setAllowedHeaders(List.of("*"));
-					cors.setAllowCredentials(false);
-					return cors;
-				}))
 				.build();
 	}
 
@@ -100,6 +94,22 @@ public class SecurityConfig {
 	CorsFilter corsFilter() {
 		CorsFilter filter = new CorsFilter();
 		return filter;
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.addAllowedOrigin("*");
+		corsConfiguration.setAllowedMethods(Arrays.asList(
+				HttpMethod.GET.name(),
+				HttpMethod.HEAD.name(),
+				HttpMethod.POST.name(),
+				HttpMethod.PUT.name(),
+				HttpMethod.DELETE.name()));
+		corsConfiguration.setMaxAge(1800L);
+		source.registerCorsConfiguration("/**", corsConfiguration); // you restrict your path here
+		return source;
 	}
 
 	/**

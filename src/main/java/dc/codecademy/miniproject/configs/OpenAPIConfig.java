@@ -11,9 +11,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
+import lombok.extern.log4j.Log4j2;
 
 @Configuration
 @SecurityScheme(name = "bearerAuth", description = "JWT token", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT", in = SecuritySchemeIn.HEADER)
+@Log4j2
 public class OpenAPIConfig {
 
     @Value("${instanceUrl:'http://localhost:8080'}")
@@ -21,7 +23,7 @@ public class OpenAPIConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        System.out.println("Picked up url as " + instanceUrl);
+        log.info("Picked up url {} for Swagger UI", instanceUrl);
         return new OpenAPI()
                 .addServersItem(new Server().url(instanceUrl).description("Local Dev"))
                 .info(new Info()

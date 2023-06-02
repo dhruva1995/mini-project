@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,8 +105,19 @@ public class FileOpsController {
 
     @ExceptionHandler(SQLException.class)
     public ResponseEntity<ErrorResponse> handleSQLExceptions(SQLException exe) {
-        log.error(exe);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exe.getMessage()))
+        log.error(exe.getMessage(), exe);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exe.getMessage()));
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleSQLExceptions(DataIntegrityViolationException exe) {
+        log.error(exe.getMessage(), exe);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exe.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleSQLExceptions(Exception exe) {
+        log.error(exe.getMessage(), exe);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(exe.getMessage()));
+    }
 }

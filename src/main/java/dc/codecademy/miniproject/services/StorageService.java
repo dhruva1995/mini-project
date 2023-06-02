@@ -64,7 +64,6 @@ public class StorageService {
     }
 
     public Optional<Pair<Resource, PhotoMetadata>> getFileContent(long id, Authentication auth) {
-        // TODO start here!
         var optMetadata = getPhotoMetadata(id, auth);
         if (optMetadata.isPresent()) {
             PhotoMetadata photoMeta = optMetadata.get();

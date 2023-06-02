@@ -1,5 +1,7 @@
 package dc.codecademy.miniproject.configs;
 
+import java.util.Arrays;
+
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +26,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
@@ -70,6 +75,8 @@ public class SecurityConfig {
 			HttpSecurity http)
 			throws Exception {
 		return http
+				.cors()
+				.and()
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(
 						auth -> auth
@@ -78,10 +85,28 @@ public class SecurityConfig {
 								.requestMatchers("/api/v1/auth/**").permitAll()
 								.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 								.anyRequest().authenticated())
+				// .headers(headers -> headers.frameOptions(opt -> opt.sameOrigin()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.httpBasic(Customizer.withDefaults())
 				.build();
+	}
+
+	// @Bean
+	// CorsFilter corsFilter() {
+	// CorsFilter filter = new CorsFilter();
+	// return filter;
+	// }
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.setAllowedMethods(Arrays.asList(CorsConfiguration.ALL));
+		corsConfiguration.addAllowedOriginPattern(CorsConfiguration.ALL);
+		corsConfiguration.setAllowedHeaders(Arrays.asList(CorsConfiguration.ALL));
+		corsConfiguration.setMaxAge(1800L);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration);
+		return source;
 	}
 
 	/**

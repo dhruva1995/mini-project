@@ -150,7 +150,7 @@ public class FileOpsController {
         if (CustomException.class.isAssignableFrom(exe.getClass())) {
             CustomException cExe = (CustomException) exe;
             return ResponseEntity.status(cExe.getStatusCode())
-                    .body(new ErrorResponse(exe.getMessage()));
+                    .body(new ErrorResponse(cExe.getMessage()));
         } else if (SQLException.class.isAssignableFrom(exe.getClass())
                 || DataIntegrityViolationException.class.isAssignableFrom(exe.getClass())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exe.getMessage()));

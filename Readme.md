@@ -14,5 +14,6 @@
 3. Find the Authorize button on top, beside the server url. Click on it, and paste the JWT you copied in the previous step and click Authorize, next click Close.
 4. Let us start testing Photos App by uploading a photo, Navigate to Upload a file operation, keep a image to upload handy. Now you can upload file in the request body's file field and you can optionally save with a different name by providing a different name at name field above the Request body section, upon successful upload you can get a PhotoId, you upload as images as you wish.
 5. Now we will try to get our photos name list, by navigating to Get all photos section in Swagger UI, hit get Execute button to fetch the list of images you uploaded till now, remember a photo's id, so that you can download in the next step.
-6. How about downloaing one ? So navigate to Download Photo, now provide the photoId of any photo uploaded previously.
-7.
+6. How about downloaing one ? So navigate to Download Photo, now provide the photoId of any photo uploaded previously and download file.
+7. You can try to update the file, by providing a new file, if you want to retain old name, please provide the old file name as name, or else the api takes the file name of the file on disk and updates our records.
+8. If you wanna stop playing you can delete any photo, by proving id of the photo by navigating to Delete photo operation.

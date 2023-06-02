@@ -18,7 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class OpenAPIConfig {
 
-    @Value("${instanceUrl:'http://localhost:8080'}")
+    @Value("${instanceUrl:http://localhost:8080}")
     private String instanceUrl;
 
     @Bean

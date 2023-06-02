@@ -2,6 +2,10 @@ package dc.codecademy.miniproject.configs;
 
 import java.io.IOException;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
+
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -11,7 +15,9 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class CorsFilter implements Filter {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+@Component
+public class CorsFilter2 implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

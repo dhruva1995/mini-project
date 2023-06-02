@@ -83,7 +83,7 @@ public class SecurityConfig {
 								.requestMatchers("/api/v1/auth/**").permitAll()
 								.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 								.anyRequest().authenticated())
-				.headers(headers -> headers.frameOptions(opt -> opt.sameOrigin()))
+				// .headers(headers -> headers.frameOptions(opt -> opt.sameOrigin()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.httpBasic(Customizer.withDefaults())

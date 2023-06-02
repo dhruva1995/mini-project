@@ -144,27 +144,17 @@ public class FileOpsController {
         }
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleCustomExceptions(CustomException exe) {
-        return ResponseEntity.status(exe.getStatusCode())
-                .body(new ErrorResponse(exe.getMessage()));
-    }
-
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity<ErrorResponse> handleSQLExceptions(SQLException exe) {
-        log.error(exe.getMessage(), exe);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exe.getMessage()));
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleSQLExceptions(DataIntegrityViolationException exe) {
-        log.error(exe.getMessage(), exe);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exe.getMessage()));
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleSQLExceptions(Exception exe) {
         log.error(exe.getMessage(), exe);
+        if (CustomException.class.isAssignableFrom(exe.getClass())) {
+            CustomException cExe = (CustomException) exe;
+            return ResponseEntity.status(cExe.getStatusCode())
+                    .body(new ErrorResponse(exe.getMessage()));
+        } else if (SQLException.class.isAssignableFrom(exe.getClass())
+                || DataIntegrityViolationException.class.isAssignableFrom(exe.getClass())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(exe.getMessage()));
+        }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(exe.getMessage()));
     }
 }

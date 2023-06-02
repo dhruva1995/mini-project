@@ -74,15 +74,14 @@ public class AuthController {
                 .body(userDetailsService.saveUser(username, request.password()));
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleCustomExceptions(CustomException exe) {
-        return ResponseEntity.status(exe.getStatusCode())
-                .body(new ErrorResponse(exe.getMessage()));
-    }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleSQLExceptions(Exception exe) {
         log.error(exe.getMessage(), exe);
+        if (CustomException.class.isAssignableFrom(exe.getClass())) {
+            CustomException cse = (CustomException) exe;
+            return ResponseEntity.status(cse.getStatusCode())
+                    .body(new ErrorResponse(exe.getMessage()));
+        }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(exe.getMessage()));
     }
 

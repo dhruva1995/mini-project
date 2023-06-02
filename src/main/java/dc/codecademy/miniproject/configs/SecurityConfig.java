@@ -75,7 +75,7 @@ public class SecurityConfig {
 			HttpSecurity http)
 			throws Exception {
 		return http
-				.cors()
+				.cors(Customizer.withDefaults())
 				.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(
 						auth -> auth

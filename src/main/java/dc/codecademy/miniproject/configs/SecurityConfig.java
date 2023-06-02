@@ -100,13 +100,9 @@ public class SecurityConfig {
 	CorsConfigurationSource corsConfigurationSource() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
-		corsConfiguration.addAllowedOrigin("*");
-		corsConfiguration.setAllowedMethods(Arrays.asList(
-				HttpMethod.GET.name(),
-				HttpMethod.HEAD.name(),
-				HttpMethod.POST.name(),
-				HttpMethod.PUT.name(),
-				HttpMethod.DELETE.name()));
+		corsConfiguration.setAllowedMethods(Arrays.asList(CorsConfiguration.ALL));
+		corsConfiguration.addAllowedOriginPattern(CorsConfiguration.ALL);
+
 		corsConfiguration.setMaxAge(1800L);
 		source.registerCorsConfiguration("/**", corsConfiguration); // you restrict your path here
 		return source;

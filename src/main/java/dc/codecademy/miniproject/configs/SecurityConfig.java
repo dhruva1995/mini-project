@@ -1,5 +1,7 @@
 package dc.codecademy.miniproject.configs;
 
+import java.util.List;
+
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
@@ -80,6 +83,13 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.httpBasic(Customizer.withDefaults())
+				.cors(corsConfig -> corsConfig.configurationSource(request -> {
+					var cors = new CorsConfiguration();
+					cors.addAllowedOrigin("*");
+					cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+					cors.setAllowedHeaders(List.of("*"));
+					return cors;
+				}))
 				.build();
 	}
 

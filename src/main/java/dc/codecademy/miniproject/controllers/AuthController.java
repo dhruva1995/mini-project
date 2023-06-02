@@ -6,10 +6,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import dc.codecademy.miniproject.models.CustomException;
@@ -28,6 +30,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RestController
 @Log4j2
+@CrossOrigin(originPatterns = "*", methods = { RequestMethod.POST })
 @Tag(name = "Auth Operations", description = "API's for signup and login for the users.")
 @RequestMapping("api/v1/auth")
 public class AuthController {

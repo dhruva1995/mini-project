@@ -1,4 +1,4 @@
-package dc.codecademy.miniproject.controllers;
+package dc.codecademy.miniproject.models;
 
 import org.springframework.http.HttpStatus;
 

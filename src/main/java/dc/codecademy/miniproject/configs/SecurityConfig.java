@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -31,6 +32,7 @@ import dc.codecademy.miniproject.services.JPAUserDetailsService;
  * Configuration class for Spring Security settings.
  */
 @EnableWebSecurity
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
 
@@ -72,7 +74,7 @@ public class SecurityConfig {
 						auth -> auth
 								.requestMatchers("/h2-console/**").permitAll()
 								.requestMatchers("/api/v1/auth/**").permitAll()
-								.requestMatchers("/swagger-ui/**").permitAll()
+								.requestMatchers("/v3/api-docs/**", "/swagger-ui.html").permitAll()
 								.anyRequest().authenticated())
 				.headers(headers -> headers.frameOptions(opt -> opt.sameOrigin()))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

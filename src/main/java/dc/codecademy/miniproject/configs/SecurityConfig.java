@@ -7,6 +7,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -76,6 +77,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(
 						auth -> auth
 								.requestMatchers("/h2-console/**").permitAll()
+								.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 								.requestMatchers("/api/v1/auth/**").permitAll()
 								.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 								.anyRequest().authenticated())
@@ -91,6 +93,12 @@ public class SecurityConfig {
 					return cors;
 				}))
 				.build();
+	}
+
+	@Bean
+	CorsFilter corsFilter() {
+		CorsFilter filter = new CorsFilter();
+		return filter;
 	}
 
 	/**

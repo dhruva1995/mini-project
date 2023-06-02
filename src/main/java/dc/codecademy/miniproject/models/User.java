@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -15,24 +14,25 @@ import lombok.ToString;
 @Entity
 @Data
 @ToString
-@Table(uniqueConstraints = @UniqueConstraint(name = "unique_username", columnNames = { "userName" }))
 @NoArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(name = "user_name", nullable = false)
-    private String userName;
+    @Column(nullable = false, unique = true)
+    private String username;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
     @JsonIgnore
     private String roles;
 
-    public User(String userName, String password, String roles) {
-        this.userName = userName;
+    public User(String username, String password, String roles) {
+        this.username = username;
         this.password = password;
         this.roles = roles;
     }

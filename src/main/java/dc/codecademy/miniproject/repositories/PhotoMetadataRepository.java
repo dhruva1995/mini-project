@@ -14,4 +14,6 @@ public interface PhotoMetadataRepository extends JpaRepository<PhotoMetadata, Lo
 
     Optional<PhotoMetadata> findByUserAndId(User user, long id);
 
+    Optional<PhotoMetadata> findByUserAndName(User user, String name);
+
 }

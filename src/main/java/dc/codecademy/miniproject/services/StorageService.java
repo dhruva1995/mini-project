@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import dc.codecademy.miniproject.models.Pair;
 import dc.codecademy.miniproject.models.PhotoMetadata;
 import dc.codecademy.miniproject.models.User;
 import dc.codecademy.miniproject.repositories.PhotoMetadataRepository;
@@ -30,14 +31,19 @@ public class StorageService {
     @Autowired
     private PhotoMetadataRepository photoRepo;
 
+    public boolean fileAlreadyExists(String fileName, Authentication auth) {
+        return photoRepo.findByUserAndName(getUser(auth), fileName).isPresent();
+    }
+
     @Transactional
     public PhotoMetadata saveFile(MultipartFile file, String fileName, Authentication auth) throws IOException {
         if (fileName == null || fileName.isEmpty()) {
             fileName = file.getOriginalFilename();
         }
-        Files.write(getBasePath().resolve(fileName), file.getBytes());
         LocalDateTime now = LocalDateTime.now();
         PhotoMetadata metadata = photoRepo.save(new PhotoMetadata(getUser(auth), fileName, now, now));
+        Files.write(getBasePath().resolve(metadata.getIdAsString()), file.getBytes());
+
         return metadata;
     }
 
@@ -50,17 +56,23 @@ public class StorageService {
         var photoMetadata = this.getPhotoMetadata(id, auth);
         if (photoMetadata.isPresent()) {
             photoRepo.delete(photoMetadata.get());
-            Files.deleteIfExists(getBasePath().resolve(photoMetadata.get().getName()));
+            Files.deleteIfExists(getBasePath().resolve(photoMetadata.get().getIdAsString()));
             return true;
         } else {
             return false;
         }
     }
 
-    public Optional<Resource> getFileContent(long id, Authentication auth) {
-        return getPhotoMetadata(id, auth)
-                .map(photoMeta -> getBasePath().resolve(photoMeta.getName()))
-                .map(FileSystemResource::new);
+    public Optional<Pair<Resource, PhotoMetadata>> getFileContent(long id, Authentication auth) {
+        // TODO start here!
+        var optMetadata = getPhotoMetadata(id, auth);
+        if (optMetadata.isPresent()) {
+            PhotoMetadata photoMeta = optMetadata.get();
+            Resource resource = new FileSystemResource(getBasePath().resolve(photoMeta.getIdAsString()));
+            return Optional.of(new Pair<>(resource, photoMeta));
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Transactional
@@ -76,7 +88,7 @@ public class StorageService {
         oldMetadata.setName(fileName);
         oldMetadata.setUpdateAt(LocalDateTime.now());
         oldMetadata = photoRepo.save(oldMetadata);
-        Files.write(getBasePath().resolve(fileName), file.getBytes());
+        Files.write(getBasePath().resolve(oldMetadata.getIdAsString()), file.getBytes());
         return Optional.of(oldMetadata);
     }
 

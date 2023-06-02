@@ -1,5 +1,7 @@
 package dc.codecademy.miniproject.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +23,7 @@ public class JPAUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.findByUserName(username)
+        return userRepo.findByUsername(username)
                 .map(SecurityUser::new)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + username));
     }
@@ -29,6 +31,10 @@ public class JPAUserDetailsService implements UserDetailsService {
     public User saveUser(String username, String password) {
         User user = new User(username, this.encoder.encode(password), "ROLE_USER, USER");
         return userRepo.save(user);
+    }
+
+    public Optional<User> findByUsername(final String username) {
+        return userRepo.findByUsername(username);
     }
 
 }

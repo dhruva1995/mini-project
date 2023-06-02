@@ -15,11 +15,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import dc.codecademy.miniproject.repositories.UserRepository;
 import dc.codecademy.miniproject.services.JPAUserDetailsService;
 import lombok.extern.log4j.Log4j2;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableMethodSecurity
-@EnableSwagger2
+
 @Log4j2
 public class MiniProjectApplication {
 

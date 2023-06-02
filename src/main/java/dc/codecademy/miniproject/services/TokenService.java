@@ -14,14 +14,17 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import dc.codecademy.miniproject.models.SecurityUser;
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Log4j2
 public class TokenService {
 
     @Autowired
     private JwtEncoder encoder;
 
     public String generateToken(SecurityUser secUser) {
+        log.info("Issuing JWT token for {}", secUser.getUsername());
         Instant now = Instant.now();
         String scope = secUser.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

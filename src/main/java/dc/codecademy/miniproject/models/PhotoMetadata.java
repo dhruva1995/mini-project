@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "userId" }))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "name", "user_id" }))
 @Data
 @NoArgsConstructor
 public class PhotoMetadata {
@@ -26,7 +26,7 @@ public class PhotoMetadata {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     private String name;
@@ -35,10 +35,15 @@ public class PhotoMetadata {
 
     private LocalDateTime updateAt;
 
-    public PhotoMetadata(User createdBy, String name, LocalDateTime createAt, LocalDateTime updateAt) {
-        this.user = createdBy;
+    public PhotoMetadata(User user, String name, LocalDateTime createAt, LocalDateTime updateAt) {
+        this.user = user;
         this.name = name;
         this.createAt = createAt;
         this.updateAt = updateAt;
+    }
+
+    @JsonIgnore
+    public String getIdAsString() {
+        return Long.toString(id);
     }
 }
